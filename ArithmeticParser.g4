@@ -11,3 +11,5 @@ expression:
 	integer op = ('<' | '>' | '<=' | '>=' | '=') integer	# ValueCompare
 	| expression op = ('and' | 'or') expression				# LogicJoin
 	| '(' expression ')'									# ParenthesesExpression;
+
+query: expression;
