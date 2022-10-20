@@ -36,4 +36,4 @@ message("ANTLR4_SRC_FILES_antlrcpptest_parser: ${ANTLR4_SRC_FILES_antlrcpptest_p
 include_directories(${ANTLR4_INCLUDE_DIR} ${ANTLR4_INCLUDE_DIR_antlrcpptest_lexer} ${ANTLR4_INCLUDE_DIR_antlrcpptest_parser})
 add_executable(${PROJECT_NAME} ${SOURCES} ${ANTLR4_SRC_FILES_antlrcpptest_lexer} ${ANTLR4_SRC_FILES_antlrcpptest_parser})
 add_dependencies(${PROJECT_NAME} antlr4_static)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES} antlr4_static)
+target_link_libraries(${PROJECT_NAME} PRIVATE antlr4_static)
