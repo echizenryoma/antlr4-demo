@@ -12,26 +12,27 @@ using namespace antlrcpptest;
 
 class EvaluatorListener : public ArithmeticParserBaseListener {
 protected:
-  antlr4::tree::ParseTreeProperty<int> property_map_;
-  int ans_ = 0;
+  antlr4::tree::ParseTreeProperty<int> int_map_;
+  antlr4::tree::ParseTreeProperty<bool> expression_map_;
+  bool ans_ = 0;
 
 public:
-  int GetAnswer() const { return ans_; }
+  bool GetAnswer() const { return ans_; }
 
   void exitInteger(ArithmeticParser::IntegerContext *ctx) override {
     int ans = std::stod(ctx->getText());
-    property_map_.put(ctx, ans);
+    int_map_.put(ctx, ans);
   }
 
   void exitParenthesesExpression(
       ArithmeticParser::ParenthesesExpressionContext *ctx) override {
-    property_map_.put(ctx, property_map_.get(ctx->expression()));
+    expression_map_.put(ctx, expression_map_.get(ctx->expression()));
   }
 
   void exitLogicJoin(ArithmeticParser::LogicJoinContext *ctx) override {
-    int lhs = property_map_.get(ctx->expression(0));
-    int rhs = property_map_.get(ctx->expression(1));
-    int ans = 0;
+    bool lhs = expression_map_.get(ctx->expression(0));
+    bool rhs = expression_map_.get(ctx->expression(1));
+    bool ans = false;
     switch (ctx->op->getType()) {
     case ArithmeticLexer::AND:
       ans = lhs && rhs;
@@ -43,42 +44,42 @@ public:
       ans = 0;
       break;
     }
-    property_map_.put(ctx, ans);
+    expression_map_.put(ctx, ans);
   }
 
   void exitValueCompare(ArithmeticParser::ValueCompareContext *ctx) override {
-    int lhs = property_map_.get(ctx->integer(0));
-    int rhs = property_map_.get(ctx->integer(1));
-    int ans = 0;
+    int lhs = int_map_.get(ctx->integer(0));
+    int rhs = int_map_.get(ctx->integer(1));
+    bool ans = false;
     switch (ctx->op->getType()) {
     case ArithmeticLexer::GREATER_THAN:
-      ans = (lhs > rhs) ? 1 : 0;
+      ans = (lhs > rhs);
       break;
     case ArithmeticLexer::LESS_THAN:
-      ans = (lhs < rhs) ? 1 : 0;
+      ans = (lhs < rhs);
       break;
     case ArithmeticLexer::EQUAL:
-      ans = (lhs == rhs) ? 1 : 0;
+      ans = (lhs == rhs);
       break;
     case ArithmeticLexer::NO_GREATER_THAN:
-      ans = (lhs <= rhs) ? 1 : 0;
+      ans = (lhs <= rhs);
       break;
     case ArithmeticLexer::NO_LESS_THAN:
-      ans = (lhs >= rhs) ? 1 : 0;
+      ans = (lhs >= rhs);
       break;
     default:
-      ans = 0;
+      ans = false;
       break;
     }
-    property_map_.put(ctx, ans);
+    expression_map_.put(ctx, ans);
   }
 
   void exitQuery(ArithmeticParser::QueryContext *ctx) override {
-    ans_ = property_map_.get(ctx->expression());
+    ans_ = expression_map_.get(ctx->expression());
   }
 };
 
-int eval(const std::string &line) {
+bool eval(const std::string &line) {
   antlr4::ANTLRInputStream input(line);
   ArithmeticLexer lexer(&input);
   antlr4::CommonTokenStream tokens(&lexer);
