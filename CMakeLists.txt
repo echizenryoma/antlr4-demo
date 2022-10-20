@@ -33,7 +33,7 @@ antlr4_generate(
 message("ANTLR4_INCLUDE_DIR_antlrcpptest_parser: ${ANTLR4_INCLUDE_DIR_antlrcpptest_parser}")
 message("ANTLR4_SRC_FILES_antlrcpptest_parser: ${ANTLR4_SRC_FILES_antlrcpptest_parser}")
 
-include_directories(${Boost_INCLUDE_DIRS} ${ANTLR4_INCLUDE_DIR} ${ANTLR4_INCLUDE_DIR_antlrcpptest_lexer} ${ANTLR4_INCLUDE_DIR_antlrcpptest_parser})
+include_directories(${ANTLR4_INCLUDE_DIR} ${ANTLR4_INCLUDE_DIR_antlrcpptest_lexer} ${ANTLR4_INCLUDE_DIR_antlrcpptest_parser})
 add_executable(${PROJECT_NAME} ${SOURCES} ${ANTLR4_SRC_FILES_antlrcpptest_lexer} ${ANTLR4_SRC_FILES_antlrcpptest_parser})
 add_dependencies(${PROJECT_NAME} antlr4_static)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES} antlr4_static)
